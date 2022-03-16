@@ -73,6 +73,10 @@ namespace Tuan4_NguyenPhuLoc.Controllers
             ViewBag.Tongsoluong = TongSoLuong();
             ViewBag.Tongtien = TongTien();
             ViewBag.Tongsoluongsanpham = TongSoLuongSanPham();
+            ViewBag.Message = Session["Message"];
+            ViewBag.AlertStatus = Session["AlertStatus"];
+            Session.Remove("Message");
+            Session.Remove("AlertStatus");
             return View(listGioHang);
         }
 
@@ -102,7 +106,7 @@ namespace Tuan4_NguyenPhuLoc.Controllers
             if (giohang != null)
             {
                 Sach sach = data.Saches.FirstOrDefault(m => m.masach == id);
-                int sl = int.Parse(collection["txtSolg"].ToString());
+                int sl = int.Parse(collection["txtSoLg"].ToString());
                 if(sl>sach.soluongton)
                 {
                     Session["Message"] = "Không đủ số lượng";

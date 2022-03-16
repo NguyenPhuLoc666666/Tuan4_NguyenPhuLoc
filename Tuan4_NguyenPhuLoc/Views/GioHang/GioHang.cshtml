@@ -36,7 +36,9 @@
                     </a> | @Html.ActionLink("Xóa", "XoaGiohang", new { @id = item.masach })
                 </td>
                 <td>
-                    <input type="submit" value="Cập nhật" class="btn btn=success" />
+                    <input type="submit" value="Cập nhật" class="btn btn=success"  style="background-color: green; color: white" />
+                    @ViewBag.Message
+                    @ViewBag.AlertStatus
                 </td>
             }
         </tr>
