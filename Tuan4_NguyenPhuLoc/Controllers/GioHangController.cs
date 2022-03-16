@@ -123,7 +123,16 @@ namespace Tuan4_NguyenPhuLoc.Controllers
         public ActionResult DatHang()
         {
             List<GioHang> listGioHang = LayGioHang();
-            foreach(var)
+            foreach(var item in listGioHang)
+            {
+                var sach = data.Saches.FirstOrDefault(m => m.masach == item.masach);
+                sach.soluongton -= item.isoluong;
+            }
+            data.SubmitChanges();
+            Session["Message"] = "Đặt hàng thành công";
+            Session["AlertSatus"] = "success";
+            listGioHang.Clear();
+            return RedirectToAction("GioHang");
         }
     }
 }
