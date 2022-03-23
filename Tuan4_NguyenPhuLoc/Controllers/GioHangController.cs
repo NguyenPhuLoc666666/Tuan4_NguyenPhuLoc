@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Tuan4_NguyenPhuLoc.Models;
 
@@ -170,7 +173,7 @@ namespace Tuan4_NguyenPhuLoc.Controllers
             dh.thanhtoan = false;
             if (dh.ngaygiao.Value < dh.ngaydat.Value)
             {
-                Session["Message1"] = "Ngày giao hàng phải lớn hơn hoặc bằng ngày hiện tại";
+                ViewBag.Message1 = "Ngày giao hàng phải lớn hơn hoặc bằng ngày hiện tại";
                 return RedirectToAction("DatHang");
             }
 
@@ -196,6 +199,48 @@ namespace Tuan4_NguyenPhuLoc.Controllers
 
         public ActionResult XacNhanDonHang()
         {
+            return View();
+        }
+        public ActionResult SendEmail()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult SendEmail(string receiver)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var senderEmail = new MailAddress("ducnguyen05086886@gmail.com", "Felix");
+                    var receiverEmail = new MailAddress(receiver, "Receiver");
+                    var password = "#Cntt1923?";
+                    var sub = "Email xác nhận đặt hàng!";
+                    var body = "Cảm ơn quý khách hàng đã yêu quý và ủng hộ Shop, đơn hàng của bạn đã được xác nhận đặt hàng thành công!";
+                    var smtp = new SmtpClient
+                    {
+                        Host = "smtp.gmail.com",
+                        Port = 587,
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential(senderEmail.Address, password)
+                    };
+                    using (var mess = new MailMessage(senderEmail, receiverEmail)
+                    {
+                        Subject = sub,
+                        Body = body
+                    })
+                    {
+                        smtp.Send(mess);
+                    }
+                    return View();
+                }
+            }
+            catch (Exception)
+            {
+                ViewBag.Error = "Some Error";
+            }
             return View();
         }
     }
